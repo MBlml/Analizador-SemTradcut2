@@ -51,12 +51,115 @@ bool identificadorValido(char* str)
     return true;
 }
 
+//verificar si el caracter dado es un operador de adicion
+bool esOperadorAdicion(char caracter)							
+{
+    if (caracter == '+' || caracter == '-')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un operador de multiplicacion
+bool esOperadorMultiplicacion(char caracter)							
+{
+    if (caracter == '*' || caracter == '/')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un operador de asignacion
+bool esOperadorAsignacion(char caracter)							
+{
+    if (caracter == '=')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un operador de asignacion
+bool esOperadorRelacional(char caracter)							
+{
+    if (caracter == '<' || caracter == '>' ||
+        caracter == '<=' || caracter == '>=' ||
+        caracter == '!=' || caracter == '==')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un operador AND
+bool esOperadorAnd(char caracter)							
+{
+    if (caracter == '&&')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un operador OR
+bool esOperadorOr(char caracter)							
+{
+    if (caracter == '||')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un operador NOT
+bool esOperadorNot(char caracter)							
+{
+    if (caracter == '!')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un parentesis
+bool esParentesis(char caracter)							
+{
+    if (caracter == '(' || caracter == ')')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es una llave
+bool esLlave(char caracter)							
+{
+    if (caracter == '{' || caracter == '}')
+    {
+        return true;
+    }
+    return false;
+}
+
+//verificar si el caracter dado es un punto y coma
+bool esPuntoyComa(char caracter)							
+{
+    if (caracter == ';')
+    {
+        return true;
+    }
+    return false;
+}
+
 //verificar si el caracter dado es un operador
 bool esOperador(char caracter)							
 {
-    if (caracter == '+' || caracter == '-' || caracter == '*' ||
-        caracter == '/' || caracter == '>' || caracter == '<' ||
-        caracter == '=' || caracter == '|' || caracter == '&')
+    if (esOperadorAdicion || esOperadorMultiplicacion ||
+        esOperadorAsignacion || esOperadorRelacional || 
+        esOperadorAnd || esOperadorOr || esOperadorNot ||
+        esParentesis || esLlave || esPuntoyComa/*  || esPalabraClave */)
     {
         return true;
     }
@@ -66,7 +169,7 @@ bool esOperador(char caracter)
 //verificar si la subcadena dada es una palabra clave
 bool esPalabraClave(char* str)						
 {
-    if (!strcmp(str, "if") || !strcmp(str, "else") ||
+    /* if (!strcmp(str, "if") || !strcmp(str, "else") ||
         !strcmp(str, "while") || !strcmp(str, "do") ||
         !strcmp(str, "break") || !strcmp(str, "continue")
         || !strcmp(str, "int") || !strcmp(str, "double")
@@ -81,7 +184,13 @@ bool esPalabraClave(char* str)
         || !strcmp(str, "enum") || !strcmp(str, "const")
         || !strcmp(str, "union") || !strcmp(str, "extern")
         || !strcmp(str, "bool") || !strcmp(str, "cout") 
-        || !strcmp(str, "str"))
+        || !strcmp(str, "str")) */ 
+
+        //if while return else int float
+
+    if (!strcmp(str, "if") || !strcmp(str, "else") ||
+        !strcmp(str, "while") || !strcmp(str, "return") ||
+        !strcmp(str, "int") || !strcmp(str, "float"))
     {
         return true;
     }
@@ -119,6 +228,8 @@ bool esNumero(char* str)
     }
     return true;
 }
+
+
 
 //extraer la subcadena requerida de la cadena principal
 char* subCadena(char* realStr, int l, int r)				
