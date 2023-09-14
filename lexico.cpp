@@ -153,19 +153,6 @@ bool esPuntoyComa(char caracter)
     return false;
 }
 
-//verificar si el caracter dado es un operador
-bool esOperador(char caracter)							
-{
-    if (esOperadorAdicion || esOperadorMultiplicacion ||
-        esOperadorAsignacion || esOperadorRelacional || 
-        esOperadorAnd || esOperadorOr || esOperadorNot ||
-        esParentesis || esLlave || esPuntoyComa/*  || esPalabraClave */)
-    {
-        return true;
-    }
-    return false;
-}
-
 //verificar si la subcadena dada es una palabra clave
 bool esPalabraClave(char* str)						
 {
@@ -229,7 +216,18 @@ bool esNumero(char* str)
     return true;
 }
 
-
+//verificar si el caracter dado es un operador
+bool esOperador(char caracter)							
+{
+    if (esOperadorAdicion || esOperadorMultiplicacion ||
+        esOperadorAsignacion || esOperadorRelacional || 
+        esOperadorAnd || esOperadorOr || esOperadorNot ||
+        esParentesis || esLlave || esPuntoyComa || esPalabraClave)
+    {
+        return true;
+    }
+    return false;
+}
 
 //extraer la subcadena requerida de la cadena principal
 char* subCadena(char* realStr, int l, int r)				
