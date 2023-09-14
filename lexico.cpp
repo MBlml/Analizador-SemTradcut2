@@ -216,6 +216,44 @@ bool esNumero(char* str)
     return true;
 }
 
+bool esNumeroDecimal(char* str)							
+{
+    int i, len = strlen(str);
+    int numOfDecimalPoints = 0;
+    
+    if (len == 0)
+    {
+        return false;
+    }
+    
+    for (i = 0; i < len; i++)
+    {
+        if (numOfDecimalPoints > 1)
+        {
+            // Más de un punto decimal, no es un número decimal válido
+            return false;
+        }
+        
+        if (str[i] == '.')
+        {
+            numOfDecimalPoints++;
+        }
+        else if (str[i] != '-' && (str[i] < '0' || str[i] > '9'))
+        {
+            // Carácter no válido en un número decimal
+            return false;
+        }
+        
+        if (i == 0 && str[i] == '-')
+        {
+            // El signo negativo solo es válido en la primera posición
+            continue;
+        }
+    }
+    
+    return true;
+}
+
 //verificar si el caracter dado es un operador
 bool esOperador(char caracter)							
 {
@@ -227,6 +265,38 @@ bool esOperador(char caracter)
         return true;
     }
     return false;
+}
+
+// Función para verificar si una cadena es una cadena de texto
+bool esCadenaTexto(char* str)
+{
+    int i, len = strlen(str);
+    
+    for (i = 0; i < len; i++)
+    {
+        char caracter = str[i];
+        
+        // Verifica si el carácter es un operador NOT, un paréntesis, una llave o un punto y coma.
+        if (!esOperadorNot(caracter) && !esParentesis(caracter) && !esLlave(caracter) && !esPuntoyComa(caracter))
+        {
+            // Si no es ninguno de estos caracteres, verifica si es una palabra clave o un número.
+            char subcadena[32]; // Tamaño máximo de una palabra clave o número
+            int j = 0;
+            while (i < len && str[i] != ' ' && j < 31)
+            {
+                subcadena[j++] = str[i++];
+            }
+            subcadena[j] = '\0';
+            
+            if (!esPalabraClave(subcadena) && !esNumero(subcadena))
+            {
+                // Si no es una palabra clave ni un número, entonces no es una cadena de texto válida.
+                return false;
+            }
+        }
+    }
+    
+    return true;
 }
 
 //extraer la subcadena requerida de la cadena principal
@@ -288,18 +358,34 @@ void analizar(char* str)
             //extraer subcadena
             char* sub = subCadena(str, left, right - 1);   
 
-            if (esPalabraClave(sub) == true)
+            if (sub == "int" || sub == "float" || sub == "void") //Analizar
+            {
+                cout << '"' << sub << '"' << " = Tipo (Tipo 4)\n";
+            }
+            /* else if (esPalabraClave(sub) == true)
             {
                 cout << '"' << sub << '"' << " = Palabra clave\n";
-            }
+            } */
             else if (esNumero(sub) == true)
             {
-                cout << '"' << sub << '"' << " = Numero\n";
+                cout << '"' << sub << '"' << " = Entero (Tipo 1)\n";
+            }
+            else if (esNumeroDecimal(sub) == true)
+            {
+                cout << '"' << sub << '"' << " = Real (Tipo 2)\n";
+            }
+            else if (esOperadorAdicion(sub) == true)
+            {
+                cout << '"' << sub << '"' << " = opSuma (Tipo 5)\n";
+            }
+            else if (esCadenaTexto(sub) == true)
+            {
+                cout << '"' << sub << '"' << " = Cadena (Tipo 3)\n";
             }
             else if (identificadorValido(sub) == true
                 && esPuntuador(str[right - 1]) == false)
             {
-                cout << '"' << sub << '"' << " = Identificador valido\n";
+                cout << '"' << sub << '"' << " = Identificador (Tipo 0)\n";
             }
             else if (identificadorValido(sub) == false
                 && esPuntuador(str[right - 1]) == false)
@@ -317,7 +403,7 @@ int main()
 {
     char codigo[100];
 
-    cout << "-ANALIZADOR LEXICO-\n\n";
+    cout << "-ANALIZAooooooooooooooDOR LEXICO-\n\n";
     cout << "Linea a analizar: ";
     cin.getline(codigo, 100,'\n'); //cout << 1+2 abc +}
 
