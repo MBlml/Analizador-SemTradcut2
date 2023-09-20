@@ -1,416 +1,183 @@
-#include <fstream>
 #include <iostream>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstring>
+#include <cctype>
+#include <iomanip>
 
 using namespace std;
 
-//Verificar si es un puntuador
-bool esPuntuador(char caracter)
-{
-    if (caracter == ' ' || caracter == '+' || caracter == '-' || caracter == '*' ||
-        caracter == '/' || caracter == ',' || caracter == ';' || caracter == '>' ||
-        caracter == '<' || caracter == '=' || caracter == '(' || caracter == ')' ||
-        caracter == '[' || caracter == ']' || caracter == '{' || caracter == '}' ||
-        caracter == '&' || caracter == '|')
-    {
-        return true;
-    }
-    return false;
-}
-
-//Verificar si es un identificador
-bool identificadorValido(char* str)						
-{
-    if (str[0] == '0' || str[0] == '1' || str[0] == '2' ||
-        str[0] == '3' || str[0] == '4' || str[0] == '5' ||
-        str[0] == '6' || str[0] == '7' || str[0] == '8' ||
-        str[0] == '9' || esPuntuador(str[0]) == true)
-    {
-        return false;
-    }
-    //no es válido si el primer carácter de la cadena es un dígito o un carácter especial					
-    int i, len = strlen(str);
-    if (len == 1)
-    {
-        return true;
-    }
-    //es verdadero si la longitud es uno, la validación ya está completa
-    else
-    {
-        //el identificador no puede contener caracteres especiales
-        for (i = 1; i < len; i++)						
-        {
-            if (esPuntuador(str[i]) == true)
-            {
-                return false;
-            }
+bool esPalabraClave(const char* str) {
+    const char* palabrasClave[] = { "if", "else", "while", "return", "int", "void", "float", "cout", "endl" };
+    for (const char* palabra : palabrasClave) {
+        if (strcmp(str, palabra) == 0) {
+            return true;
         }
     }
-    return true;
-}
-
-//verificar si el caracter dado es un operador de adicion
-bool esOperadorAdicion(char caracter)							
-{
-    if (caracter == '+' || caracter == '-')
-    {
-        return true;
-    }
     return false;
 }
 
-//verificar si el caracter dado es un operador de multiplicacion
-bool esOperadorMultiplicacion(char caracter)							
-{
-    if (caracter == '*' || caracter == '/')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un operador de asignacion
-bool esOperadorAsignacion(char caracter)							
-{
-    if (caracter == '=')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un operador de asignacion
-bool esOperadorRelacional(char caracter)							
-{
-    if (caracter == '<' || caracter == '>' ||
-        caracter == '<=' || caracter == '>=' ||
-        caracter == '!=' || caracter == '==')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un operador AND
-bool esOperadorAnd(char caracter)							
-{
-    if (caracter == '&&')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un operador OR
-bool esOperadorOr(char caracter)							
-{
-    if (caracter == '||')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un operador NOT
-bool esOperadorNot(char caracter)							
-{
-    if (caracter == '!')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un parentesis
-bool esParentesis(char caracter)							
-{
-    if (caracter == '(' || caracter == ')')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es una llave
-bool esLlave(char caracter)							
-{
-    if (caracter == '{' || caracter == '}')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si el caracter dado es un punto y coma
-bool esPuntoyComa(char caracter)							
-{
-    if (caracter == ';')
-    {
-        return true;
-    }
-    return false;
-}
-
-//verificar si la subcadena dada es una palabra clave
-bool esPalabraClave(char* str)						
-{
-    /* if (!strcmp(str, "if") || !strcmp(str, "else") ||
-        !strcmp(str, "while") || !strcmp(str, "do") ||
-        !strcmp(str, "break") || !strcmp(str, "continue")
-        || !strcmp(str, "int") || !strcmp(str, "double")
-        || !strcmp(str, "float") || !strcmp(str, "return")
-        || !strcmp(str, "char") || !strcmp(str, "case")
-        || !strcmp(str, "long") || !strcmp(str, "short")
-        || !strcmp(str, "typedef") || !strcmp(str, "switch")
-        || !strcmp(str, "unsigned") || !strcmp(str, "void")
-        || !strcmp(str, "static") || !strcmp(str, "struct")
-        || !strcmp(str, "sizeof") || !strcmp(str, "long")
-        || !strcmp(str, "volatile") || !strcmp(str, "typedef")
-        || !strcmp(str, "enum") || !strcmp(str, "const")
-        || !strcmp(str, "union") || !strcmp(str, "extern")
-        || !strcmp(str, "bool") || !strcmp(str, "cout") 
-        || !strcmp(str, "str")) */ 
-
-        //if while return else int float
-
-    if (!strcmp(str, "if") || !strcmp(str, "else") ||
-        !strcmp(str, "while") || !strcmp(str, "return") ||
-        !strcmp(str, "int") || !strcmp(str, "float"))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-//verificar si la subcadena dada es un número
-bool esNumero(char* str)							
-{
-    int i, len = strlen(str), numOfDecimal = 0;
-    if (len == 0)
-    {
-        return false;
-    }
-    for (i = 0; i < len; i++)
-    {
-        if (numOfDecimal > 1 && str[i] == '.')
-        {
-            return false;
-        }
-        else if (numOfDecimal <= 1)
-        {
-            numOfDecimal++;
-        }
-        if (str[i] != '0' && str[i] != '1' && str[i] != '2'
-            && str[i] != '3' && str[i] != '4' && str[i] != '5'
-            && str[i] != '6' && str[i] != '7' && str[i] != '8'
-            && str[i] != '9' || (str[i] == '-' && i > 0))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool esNumeroDecimal(char* str)							
-{
-    int i, len = strlen(str);
-    int numOfDecimalPoints = 0;
-    
-    if (len == 0)
-    {
-        return false;
-    }
-    
-    for (i = 0; i < len; i++)
-    {
-        if (numOfDecimalPoints > 1)
-        {
-            // Más de un punto decimal, no es un número decimal válido
-            return false;
-        }
-        
-        if (str[i] == '.')
-        {
-            numOfDecimalPoints++;
-        }
-        else if (str[i] != '-' && (str[i] < '0' || str[i] > '9'))
-        {
-            // Carácter no válido en un número decimal
-            return false;
-        }
-        
-        if (i == 0 && str[i] == '-')
-        {
-            // El signo negativo solo es válido en la primera posición
-            continue;
-        }
-    }
-    
-    return true;
-}
-
-//verificar si el caracter dado es un operador
-bool esOperador(char caracter)							
-{
-    if (esOperadorAdicion || esOperadorMultiplicacion ||
-        esOperadorAsignacion || esOperadorRelacional || 
-        esOperadorAnd || esOperadorOr || esOperadorNot ||
-        esParentesis || esLlave || esPuntoyComa || esPalabraClave)
-    {
-        return true;
-    }
-    return false;
-}
-
-// Función para verificar si una cadena es una cadena de texto
-bool esCadenaTexto(char* str)
-{
-    int i, len = strlen(str);
-    
-    for (i = 0; i < len; i++)
-    {
-        char caracter = str[i];
-        
-        // Verifica si el carácter es un operador NOT, un paréntesis, una llave o un punto y coma.
-        if (!esOperadorNot(caracter) && !esParentesis(caracter) && !esLlave(caracter) && !esPuntoyComa(caracter))
-        {
-            // Si no es ninguno de estos caracteres, verifica si es una palabra clave o un número.
-            char subcadena[32]; // Tamaño máximo de una palabra clave o número
-            int j = 0;
-            while (i < len && str[i] != ' ' && j < 31)
-            {
-                subcadena[j++] = str[i++];
-            }
-            subcadena[j] = '\0';
-            
-            if (!esPalabraClave(subcadena) && !esNumero(subcadena))
-            {
-                // Si no es una palabra clave ni un número, entonces no es una cadena de texto válida.
-                return false;
-            }
-        }
-    }
-    
-    return true;
-}
-
-//extraer la subcadena requerida de la cadena principal
-char* subCadena(char* realStr, int l, int r)				
-{
-    int i;
-
-    char* str = (char*)malloc(sizeof(char) * (r - l + 2));
-
-    for (i = l; i <= r; i++)
-    {
-        str[i - l] = realStr[i];
-        str[r - l + 1] = '\0';
-    }
-    return str;
-}
-
-//analizar la expresión
-void analizar(char* str)						
-{
-    int left = 0, right = 0;
+bool esNumero(const char* str) {
     int len = strlen(str);
-    bool puntuador = false, operador = false;
-    while (right <= len && left <= right) {
-        //si el carácter es un dígito o un caracter
-        if (esPuntuador(str[right]) == false)			
-        {
-            right++;
-        }
-        //si el carácter es un marcador
-        if (esPuntuador(str[right]) == true && left == right)		
-        {
-            puntuador = true;
-            if (esOperador(str[right]) == true)
-            {
-                operador = true;
-            }
-            else {
-                operador = false;
-            }
-        
-            if (puntuador == true && operador == true) {
-                std::cout << '"' << str[right] <<'"' << " = Puntuador y Operador\n";
-            }
-            else if (puntuador == true && operador == false){
-                std::cout << '"' << str[right] <<'"' << " = Puntuador\n";
-            }
-            else if (operador == true && puntuador == false){
-                std::cout << '"' << str[right] <<'"' << " = Operador\n";
-            }
-            right++;
-            left = right;
-        }
-
-        //comprobar si la subcadena analizada es una palabra clave, un identificador o un número
-        else if (esPuntuador(str[right]) == true && left != right
-            || (right == len && left != right)) 			
-        {
-            //extraer subcadena
-            char* sub = subCadena(str, left, right - 1);   
-
-            if (sub == "int" || sub == "float" || sub == "void") //Analizar
-            {
-                cout << '"' << sub << '"' << " = Tipo (Tipo 4)\n";
-            }
-            /* else if (esPalabraClave(sub) == true)
-            {
-                cout << '"' << sub << '"' << " = Palabra clave\n";
-            } */
-            else if (esNumero(sub) == true)
-            {
-                cout << '"' << sub << '"' << " = Entero (Tipo 1)\n";
-            }
-            else if (esNumeroDecimal(sub) == true)
-            {
-                cout << '"' << sub << '"' << " = Real (Tipo 2)\n";
-            }
-            else if (esOperadorAdicion(sub) == true)
-            {
-                cout << '"' << sub << '"' << " = opSuma (Tipo 5)\n";
-            }
-            else if (esCadenaTexto(sub) == true)
-            {
-                cout << '"' << sub << '"' << " = Cadena (Tipo 3)\n";
-            }
-            else if (identificadorValido(sub) == true
-                && esPuntuador(str[right - 1]) == false)
-            {
-                cout << '"' << sub << '"' << " = Identificador (Tipo 0)\n";
-            }
-            else if (identificadorValido(sub) == false
-                && esPuntuador(str[right - 1]) == false)
-            {
-                cout << '"' << sub << '"' << " = Identificador no valido\n";
-            }
-
-            left = right;
+    for (int i = 0; i < len; i++) {
+        if (!isdigit(str[i])) {
+            return false;
         }
     }
-    return;
+    return true;
 }
 
-int main()
-{
-    char codigo[100];
+bool esNumeroDecimal(const char* str) {
+    int len = strlen(str);
+    int puntosDecimales = 0;
+    for (int i = 0; i < len; i++) {
+        if (str[i] == '.') {
+            puntosDecimales++;
+            if (puntosDecimales > 1) {
+                return false;
+            }
+        } else if (!isdigit(str[i]) && (i != 0 || str[i] != '-')) {
+            return false;
+        }
+    }
+    return puntosDecimales == 1;
+}
 
-    cout << "-ANALIZAooooooooooooooDOR LEXICO-\n\n";
-    cout << "Linea a analizar: ";
-    cin.getline(codigo, 100,'\n'); //cout << 1+2 abc +}
+bool esCadenaTexto(const char* str) {
+    int len = strlen(str);
+    return len >= 2 && str[0] == '"' && str[len - 1] == '"';
+}
 
-    cout << "\n\n";
+void imprimirTabla(const char* elemento, const char* tipo) {
+    const int anchoElemento = 25;
+    const int anchoTipo = 20;
+
+    cout << left << setw(anchoElemento) << elemento << " => " << setw(anchoTipo) << tipo << endl;
+}
+
+void analizar(const char* str) {
+    int len = strlen(str);
+    int i = 0;
+
+    while (i < len) {
+        // Ignorar espacios en blanco
+        while (i < len && isspace(str[i])) {
+            i++;
+        }
+
+        // Verificar si es una cadena de texto
+        if (str[i] == '"') {
+            int j = i + 1;
+            while (j < len && str[j] != '"') {
+                j++;
+            }
+            if (j < len) {
+                char cadenaTexto[1000];
+                strncpy(cadenaTexto, &str[i], j - i + 1);
+                cadenaTexto[j - i + 1] = '\0';
+                if (esCadenaTexto(cadenaTexto)) {
+                    imprimirTabla(cadenaTexto, "Cadena de Texto");
+                } else {
+                    imprimirTabla(cadenaTexto, "Error: Cadena no válida");
+                }
+                i = j + 1;
+            } else {
+                imprimirTabla("\"", "Error: Cadena no cerrada");
+                i++;
+            }
+        }
+        // Verificar si es un operador
+        else if (str[i] == '+' || str[i] == '-') {
+            imprimirTabla("+", "Operador de Adición");
+            i++;
+        } else if (str[i] == '*' || str[i] == '/') {
+            imprimirTabla("*", "Operador de Multiplicación");
+            i++;
+        } else if (str[i] == '=') {
+            imprimirTabla("=", "Operador de Asignación");
+            i++;
+        } else if (str[i] == '<' || str[i] == '>' || (i + 1 < len && (str[i] == '=' || (str[i] == '&' && str[i + 1] == '&') || (str[i] == '|' && str[i + 1] == '|') || str[i] == '!'))) {
+            if (str[i] == '<' || str[i] == '>') {
+                imprimirTabla(&str[i], "Operador Relacional");
+                i++;
+            } else if (str[i] == '=') {
+                imprimirTabla("==", "Operador Relacional");
+                i += 2;
+            } else if (str[i] == '&' && str[i + 1] == '&') {
+                imprimirTabla("&&", "Operador Lógico AND");
+                i += 2;
+            } else if (str[i] == '|' && str[i + 1] == '|') {
+                imprimirTabla("||", "Operador Lógico OR");
+                i += 2;
+            } else if (str[i] == '!') {
+                imprimirTabla("!", "Operador Lógico NOT");
+                i++;
+            }
+        }
+        // Verificar si es un símbolo
+        else if (str[i] == '(' || str[i] == ')') {
+            imprimirTabla(&str[i], "Símbolo (Paréntesis)");
+            i++;
+        } else if (str[i] == '{' || str[i] == '}') {
+            imprimirTabla(&str[i], "Símbolo (Llave)");
+            i++;
+        } else if (str[i] == '[' || str[i] == ']') {
+            imprimirTabla(&str[i], "Símbolo (Corchete)");
+            i++;
+        } else if (str[i] == ';') {
+            imprimirTabla(";", "Símbolo (Punto y Coma)");
+            i++;
+        }
+        // Verificar si es una palabra clave o identificador
+        else if (isalpha(str[i]) || str[i] == '_') {
+            int j = i;
+            while (j < len && (isalnum(str[j]) || str[j] == '_')) {
+                j++;
+            }
+            char palabra[100];
+            strncpy(palabra, &str[i], j - i);
+            palabra[j - i] = '\0';
+            if (esPalabraClave(palabra)) {
+                imprimirTabla(palabra, "Palabra Clave");
+            } else {
+                imprimirTabla(palabra, "Identificador");
+            }
+            i = j;
+        }
+        // Verificar si es un número
+        else if (isdigit(str[i]) || str[i] == '-' || str[i] == '.') {
+            int j = i;
+            while (j < len && (isdigit(str[j]) || str[j] == '.')) {
+                j++;
+            }
+            char numero[100];
+            strncpy(numero, &str[i], j - i);
+            numero[j - i] = '\0';
+            if (esNumero(numero)) {
+                imprimirTabla(numero, "Número Entero");
+            } else if (esNumeroDecimal(numero)) {
+                imprimirTabla(numero, "Número Decimal");
+            }
+            i = j;
+        } else {
+            // Carácter no reconocido, avanzar al siguiente
+            i++;
+        }
+    }
+}
+
+int main() {
+    char codigo[1000];
+
+    cout << "-ANALIZADOR LEXICO-" << endl;
+    cout << "Línea a analizar: ";
+    cin.getline(codigo, sizeof(codigo));
+
+    cout << setw(25) << "Elemento" << " => " << setw(20) << "Tipo de Token" << endl;
+    cout << "---------------------------------------------------------" << endl;
 
     analizar(codigo);
 
-    cout << "\n\n";
     return 0;
 }
+
+
+//if (a==b) { cout "hola"; }
