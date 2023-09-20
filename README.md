@@ -17,3 +17,7 @@
 
 ## Resultados en consola
 ![imagen](https://github.com/MBlml/Analizador-SemTradcut2/assets/101375005/9674eb0e-8c46-42ce-953e-8c802c43d98d)
+
+## Resultados optimizados:
+![imagen](https://github.com/MBlml/Analizador-SemTradcut2/assets/101375005/928cba6a-7fe5-418a-a22d-07d0bff0adee)
+
