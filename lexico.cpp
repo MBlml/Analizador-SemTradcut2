@@ -84,6 +84,7 @@ void analizar(const char* str) {
                 i++;
             }
         }
+        
         // Verificar si es un operador
         else if (str[i] == '+' || str[i] == '-') {
             imprimirTabla("+", "Operador de Adición");
@@ -92,8 +93,16 @@ void analizar(const char* str) {
             imprimirTabla("*", "Operador de Multiplicación");
             i++;
         } else if (str[i] == '=') {
-            imprimirTabla("=", "Operador de Asignación");
-            i++;
+            if (i + 1 < len && str[i + 1] == '=') {
+                imprimirTabla("==", "Operador Relacional");
+                i += 2;
+            } else {
+                imprimirTabla("=", "Operador de Asignación");
+                i++;
+            }
+        } else if (str[i] == '<' && i + 1 < len && str[i + 1] == '<') {
+            imprimirTabla("<<", "Operador de Inserción");
+            i += 2;
         } else if (str[i] == '<' || str[i] == '>' || (i + 1 < len && (str[i] == '=' || (str[i] == '&' && str[i + 1] == '&') || (str[i] == '|' && str[i + 1] == '|') || str[i] == '!'))) {
             if (str[i] == '<' || str[i] == '>') {
                 imprimirTabla(&str[i], "Operador Relacional");
@@ -112,15 +121,26 @@ void analizar(const char* str) {
                 i++;
             }
         }
+
+
         // Verificar si es un símbolo
-        else if (str[i] == '(' || str[i] == ')') {
-            imprimirTabla(&str[i], "Símbolo (Paréntesis)");
+        else if (str[i] == '(') {
+            imprimirTabla("(", "Símbolo (Paréntesis)");
             i++;
-        } else if (str[i] == '{' || str[i] == '}') {
-            imprimirTabla(&str[i], "Símbolo (Llave)");
+        } else if (str[i] == ')') {
+            imprimirTabla(")", "Símbolo (Paréntesis)");
             i++;
-        } else if (str[i] == '[' || str[i] == ']') {
-            imprimirTabla(&str[i], "Símbolo (Corchete)");
+        } else if (str[i] == '{') {
+            imprimirTabla("{", "Símbolo (Llave)");
+            i++;
+        } else if (str[i] == '}') {
+            imprimirTabla("}", "Símbolo (Llave)");
+            i++;
+        } else if (str[i] == '[') {
+            imprimirTabla("[", "Símbolo (Corchete)");
+            i++;
+        } else if (str[i] == ']') {
+            imprimirTabla("]", "Símbolo (Corchete)");
             i++;
         } else if (str[i] == ';') {
             imprimirTabla(";", "Símbolo (Punto y Coma)");
@@ -176,8 +196,10 @@ int main() {
 
     analizar(codigo);
 
+    cout << "\n\n\n";
     return 0;
 }
 
-
-//if (a==b) { cout "hola"; }
+// codigo de prueba para el analizador:
+// if (a==b) { cout "hola"; }
+// if (a == b) {     cout << "Hola, mundo!" << endl;     int x = 10;     float y = 3.14; } 
