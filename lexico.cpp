@@ -86,11 +86,17 @@ void analizar(const char* str) {
         }
         
         // Verificar si es un operador
-        else if (str[i] == '+' || str[i] == '-') {
+        else if (str[i] == '+') {
             imprimirTabla("+", "Operador de Adición");
             i++;
-        } else if (str[i] == '*' || str[i] == '/') {
+        } else if (str[i] == '-') {
+            imprimirTabla("-", "Operador de Sustracción");
+            i++;
+        } else if (str[i] == '*') {
             imprimirTabla("*", "Operador de Multiplicación");
+            i++;
+        } else if (str[i] == '/') {
+            imprimirTabla("/", "Operador de División");
             i++;
         } else if (str[i] == '=') {
             if (i + 1 < len && str[i + 1] == '=') {
@@ -103,10 +109,22 @@ void analizar(const char* str) {
         } else if (str[i] == '<' && i + 1 < len && str[i + 1] == '<') {
             imprimirTabla("<<", "Operador de Inserción");
             i += 2;
+        } else if (str[i] == '>' && i + 1 < len && str[i + 1] == '>') { //> int main <
+            imprimirTabla(">>", "Operador de Extracción");
+            i += 2;
         } else if (str[i] == '<' || str[i] == '>' || (i + 1 < len && (str[i] == '=' || (str[i] == '&' && str[i + 1] == '&') || (str[i] == '|' && str[i + 1] == '|') || str[i] == '!'))) {
-            if (str[i] == '<' || str[i] == '>') {
-                imprimirTabla(&str[i], "Operador Relacional");
+            if (str[i] == '<') {
+                imprimirTabla("<", "Operador Relacional");
                 i++;
+            } else if (str[i] == '>') {
+                imprimirTabla(">", "Operador Relacional"); 
+                i++;
+            } else if (str[i] == '<') {
+                imprimirTabla("<<", "Operador Relacional");
+                i += 2;
+            } else if (str[i] == '>') {
+                imprimirTabla(">>", "Operador Relacional");
+                i += 2;
             } else if (str[i] == '=') {
                 imprimirTabla("==", "Operador Relacional");
                 i += 2;
