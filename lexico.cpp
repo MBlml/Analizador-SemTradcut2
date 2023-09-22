@@ -5,8 +5,8 @@
 
 using namespace std;
 
-bool esPalabraClave(const char* str) {
-    const char* palabrasClave[] = { "if", "else", "while", "return", "cout", "endl" };
+bool esFuncion(const char* str) {
+    const char* palabrasClave[] = { "main", "printf" };
     for (const char* palabra : palabrasClave) {
         if (strcmp(str, palabra) == 0) {
             return true;
@@ -14,6 +14,60 @@ bool esPalabraClave(const char* str) {
     }
     return false;
 }
+
+bool esPalabraClave(const char* str) {
+    const char* palabrasClave[] = { "endl", "cout" };
+    for (const char* palabra : palabrasClave) {
+        if (strcmp(str, palabra) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool esIf(const char* str) {
+    const char* palabrasClave[] = { "if" };
+    for (const char* palabra : palabrasClave) {
+        if (strcmp(str, palabra) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool esElse(const char* str) {
+    const char* palabrasClave[] = { "else" };
+    for (const char* palabra : palabrasClave) {
+        if (strcmp(str, palabra) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool esWhile(const char* str) {
+    const char* palabrasClave[] = { "while" };
+    for (const char* palabra : palabrasClave) {
+        if (strcmp(str, palabra) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool esReturn(const char* str) {
+    const char* palabrasClave[] = { "return" };
+    for (const char* palabra : palabrasClave) {
+        if (strcmp(str, palabra) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// CAMBIAR TODO LO DE ARRIBA
+
 
 bool esTipo(const char* str) {
     const char* tipo[] = { "int", "float", "void" };
@@ -82,8 +136,8 @@ bool esCadenaTexto(const char* str) {
 
 void imprimirTabla(const char* elemento, const char* tipo, const char* numTipo) {
     const int anchoElemento = 25;
-    const int anchoTipo = 20;
-    const int anchoNumTipo = 25;
+    const int anchoTipo = 30;
+    const int anchoNumTipo = 40;
 
     cout << left << setw(anchoElemento) << elemento << " => " << setw(anchoTipo) << tipo << setw(anchoNumTipo) << numTipo << endl;
 }
@@ -203,6 +257,10 @@ void analizar(const char* str) {
             imprimirTabla(",", "Coma", "13");
             i++;
         }
+        else if (str[i] == '$') {
+            imprimirTabla("$", "$", "23");
+            i++;
+        }
         // Verificar si es una palabra clave o identificador y verifica los números
         else if (isalpha(str[i]) || str[i] == '_' || isdigit(str[i]) || isdigit(str[i]) || str[i] == '-' || str[i] == '.') {
             int j = i;
@@ -212,8 +270,23 @@ void analizar(const char* str) {
             char palabra[100];
             strncpy(palabra, &str[i], j - i);
             palabra[j - i] = '\0';
-            if (esPalabraClave(palabra)) {
-                imprimirTabla(palabra, "Palabra Clave", "CAMBIAR");
+            if (esIf(palabra)) {
+                imprimirTabla(palabra, "Palabra Clave - Condicional", "19");
+            }
+            else if (esElse(palabra)) {
+                imprimirTabla(palabra, "Palabra Clave - Condicional", "22");
+            }
+            else if (esWhile(palabra)) {
+                imprimirTabla(palabra, "Palabra Clave - Bucle", "20");
+            }
+            else if (esReturn(palabra)) {
+                imprimirTabla(palabra, "Palabra Clave", "21");
+            }
+            else if (esPalabraClave(palabra)) {
+                imprimirTabla(palabra, "Palabra Clave", "28");
+            }
+            else if (esFuncion(palabra)) {
+                imprimirTabla(palabra, "Funcion", "29");
             }
             else if (esTipo(palabra)) {
                 imprimirTabla(palabra, "Tipo de dato", "4");
@@ -252,8 +325,8 @@ int main() {
     cout << "Línea a analizar: ";
     cin.getline(codigo, sizeof(codigo));
 
-    cout << setw(25) << "Elemento" << " => " << setw(20) << "Tipo de Token" << setw(25) << "#" << endl;
-    cout << "---------------------------------------------------------" << endl;
+    cout << "Elemento" << setw(30) << "Tipo de Token" << setw(23) << "#" << endl;
+    cout << "------------------------------------------------------------------------------------------" << endl;
 
     analizar(codigo);
 
