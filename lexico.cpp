@@ -337,3 +337,10 @@ int main() {
 // codigo de prueba para el analizador:
 // if (a==b) { cout "hola"; }
 // if (a == b) {     cout << "Hola, mundo!" << endl;     int x = 10;     float y = 3.14; }
+
+/*
+Añadir para el siguiente producto:
+
+-Interfaz gráfica
+-Caractéres especiales (por si acaso)
+*/
