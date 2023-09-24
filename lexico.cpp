@@ -7,13 +7,15 @@ using namespace std;
 
 bool esFuncion(const char* str) {
     const char* palabrasClave[] = { "main", "printf" };
-    for (const char* palabra : palabrasClave) {
-        if (strcmp(str, palabra) == 0) {
+    for (const char* palabra : palabrasClave) { // En cada iteración, 'palabra' tomará el valor de uno de los elementos del arreglo.
+        if (strcmp(str, palabra) == 0) { // Esta línea verifica si la cadena str es igual a la cadena actual en 'palabra'.
             return true;
         }
     }
     return false;
 }
+// Verifica si la cadena ingresada es una función
+
 
 bool esPalabraClave(const char* str) {
     const char* palabrasClave[] = { "endl", "cout" };
@@ -24,6 +26,8 @@ bool esPalabraClave(const char* str) {
     }
     return false;
 }
+// Verifica si la cadena ingresada es una palabra reservada
+
 
 bool esIf(const char* str) {
     const char* palabrasClave[] = { "if" };
@@ -34,6 +38,7 @@ bool esIf(const char* str) {
     }
     return false;
 }
+// Verifica si la cadena ingresada es una condicional
 
 
 bool esElse(const char* str) {
@@ -45,6 +50,7 @@ bool esElse(const char* str) {
     }
     return false;
 }
+// Verifica si la cadena ingresada es una condicional
 
 bool esWhile(const char* str) {
     const char* palabrasClave[] = { "while" };
@@ -65,8 +71,7 @@ bool esReturn(const char* str) {
     }
     return false;
 }
-
-// CAMBIAR TODO LO DE ARRIBA
+// Verifica si la cadena ingresada es un bucle while
 
 
 bool esTipo(const char* str) {
@@ -78,11 +83,13 @@ bool esTipo(const char* str) {
     }
     return false;
 }
+// Verifica si la cadena ingresada es una función
+
 
 bool contieneLetras(const char* texto) {
     int longitud = strlen(texto);
     for (int i = 0; i < longitud; i++) {
-        if (isalpha(texto[i])) {
+        if (isalpha(texto[i])) { // isalpha() devuelve true sí el caracter es una letra
             return true; // El texto contiene al menos una letra
         }
     }
@@ -93,8 +100,8 @@ bool contienePuntos(const char* texto) {
     int longitud = strlen(texto);
     int puntos = 0;
     for (int i = 0; i < longitud; i++) {
-        if (texto[i] == '.') {
-            puntos++;
+        if (texto[i] == '.') { // Comprueba si el caracter es igual a un punto.
+            puntos++; // El contador aumenta, si existen más de 1 punto no retornará true.
             if (puntos > 1) {
                 return true; // El texto contiene al menos un punto
             }
@@ -112,6 +119,8 @@ bool esNumero(const char* str) {
     }
     return true;
 }
+// Verifica si la cadena es un número entero
+
 
 bool esNumeroDecimal(const char* str) {
     int len = strlen(str);
@@ -128,11 +137,14 @@ bool esNumeroDecimal(const char* str) {
     }
     return puntosDecimales == 1;
 }
+// Verifica si la cadena es un número real
+
 
 bool esCadenaTexto(const char* str) {
     int len = strlen(str);
     return len >= 2 && str[0] == '"' && str[len - 1] == '"';
 }
+// Verifica si es una cadena, esto está marcado por "". Mientras coloques las comillas y dentro texto, el analizador lo tomará como cadena
 
 void imprimirTabla(const char* elemento, const char* tipo, const char* numTipo) {
     const int anchoElemento = 25;
@@ -293,8 +305,9 @@ void analizar(const char* str) {
             }
             else {
                 if (!palabra[0] == '\0' && isdigit(palabra[0]) || esNumeroDecimal(palabra) || contienePuntos(palabra)) {
+                    // Verifica la sintaxi de la variable
                     if (contieneLetras(palabra)) {
-                        imprimirTabla(palabra, "Identificador no valido", "ERROR");
+                        imprimirTabla(palabra, "Identificador no valido", "ERROR"); // Si no cuenta con la sintaxis correcta, devuelve este error.
                     }
                 }
                 else {
@@ -307,7 +320,7 @@ void analizar(const char* str) {
                 imprimirTabla(palabra, "Número Decimal", "2");
             }
             else if (contienePuntos(palabra)){
-                imprimirTabla(palabra, "ERROR.", "ERROR");
+                imprimirTabla(palabra, "ERROR.", "ERROR"); // Imprime este error cuando existan más de 1 punto en un número real
             }
             }
             i = j;
